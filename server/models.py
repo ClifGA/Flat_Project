@@ -16,7 +16,7 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String(50), unique=True)
     phone = db.Column(db.Integer)
     address = db.Column(db.String(50))
-    admin = db.Column(db.Boolean)
+    admin = db.Column(db.Boolean, default=False)
     job_title = db.Column(db.String(50))
     status = db.Column(db.String(50))
     DOB = db.Column(db.String(50))
@@ -25,12 +25,19 @@ class User(db.Model, SerializerMixin):
 
     education_carts = db.relationship('UserEducationCart', backref='user', lazy=True)
     skill_carts = db.relationship('UserSkillCart', backref='user', lazy=True)
+    timesheet_carts = db.relationship('Timesheetcart', backref='user', lazy=True)
     educations = association_proxy('education_carts', 'education')
     skills = association_proxy('skill_carts', 'skill')
+    timesheets = association_proxy('timesheet_carts', 'timesheet')
 
-    serialize_rules = ('-education_carts.user', '-skill_carts.user', '-educations.user_education_carts', '-skills.user_skill_carts')
-    serialize_only = ('id','first_name','last_name', 'email', 'phone', 'address','gender', 'admin', 'job_title', 'status', 'DOB', 'created_at', 'updated_at', 'educations', 'skills')
 
+    educations = association_proxy('education_carts', 'education')
+    skills = association_proxy('skill_carts', 'skill')
+    timesheets = association_proxy('timesheet_carts', 'timesheet')
+
+    serialize_rules = ('-educations.user', '-skills.user', '-timesheets.user', '-educations.user_education_carts', '-skills.user_skill_carts', '-timesheets.timesheetcarts', )
+    serialize_only = ('id', 'first_name', 'last_name', 'email', 'phone', 'address', 'gender', 'admin', 'job_title', 'status', 'DOB', 'educations', 'skills', 'timesheets',)
+    
     
 
 class UserEducationCart(db.Model, SerializerMixin):
@@ -63,3 +70,21 @@ class Skill(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     skill_name = db.Column(db.String(50))
     proficiency = db.Column(db.String(50))
+
+
+class Timesheetcart(db.Model, SerializerMixin):
+    __tablename__ = 'timesheetcarts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    timesheet_id = db.Column(db.Integer, db.ForeignKey('timesheets.id'))
+    timesheet = db.relationship('Timesheet', backref='timesheetcarts')
+
+
+class Timesheet(db.Model, SerializerMixin):
+    __tablename__ = 'timesheets'
+
+    id = db.Column(db.Integer, primary_key=True)
+    start_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+    hours = db.Column(db.Integer)

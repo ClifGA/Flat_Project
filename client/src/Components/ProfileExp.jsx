@@ -1,7 +1,6 @@
 import React from "react";
 
 const ProfileExp = ({ education, skill }) => {
-  console.log(skill);
 
   const educationList = education.map((item) => {
     return (

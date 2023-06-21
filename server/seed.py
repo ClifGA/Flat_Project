@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app import app
-from models import db, User, Education, Skill, UserEducationCart, UserSkillCart
+from models import db, User, Education, Skill, UserEducationCart, UserSkillCart, Timesheet, Timesheetcart
+from datetime import datetime
 
 
 with app.app_context():
@@ -51,4 +52,25 @@ with app.app_context():
     db.session.add(user_skill_cart3)
     db.session.add(user_skill_cart4)
     db.session.add(user_skill_cart5)
+    db.session.commit()
+
+    test_timesheet = Timesheet(start_date=datetime(2023, 6, 1), end_date=datetime(2023, 6, 1), hours=8)
+    test_timesheet2 = Timesheet( start_date=datetime(2023, 6, 1), end_date=datetime(2023, 6, 1), hours=8)
+    test_timesheet3 = Timesheet( start_date=datetime(2023, 6, 1), end_date=datetime(2023, 6, 1),hours=8)
+    test_timesheet4 = Timesheet(start_date=datetime(2023, 6, 1), end_date=datetime(2023, 6, 1),hours=8)
+
+    db.session.add(test_timesheet)
+    db.session.add(test_timesheet2)
+    db.session.add(test_timesheet3)
+    db.session.add(test_timesheet4)
+    db.session.commit()
+
+    test_timesheet_cart = Timesheetcart(user=test_user, timesheet=test_timesheet)
+    test_timesheet_cart2 = Timesheetcart(user=test_user, timesheet=test_timesheet2)
+    test_timesheet_cart3 = Timesheetcart(user=test_user, timesheet=test_timesheet3)
+    test_timesheet_cart4 = Timesheetcart(user=test_user, timesheet=test_timesheet4)
+    db.session.add(test_timesheet_cart)
+    db.session.add(test_timesheet_cart2)
+    db.session.add(test_timesheet_cart3)
+    db.session.add(test_timesheet_cart4)
     db.session.commit()

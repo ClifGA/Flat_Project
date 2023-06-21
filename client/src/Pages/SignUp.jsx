@@ -1,11 +1,6 @@
-import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-} from "@material-tailwind/react";
+import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -14,10 +9,10 @@ export default function SignUp() {
   const [phone, setPhoneNum] = useState("");
   const [address, setAddress] = useState("");
   const [date, setDate] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
-    console.log("Registering...");
     const formdata = {
       first_name: firstName,
       last_name: lastName,
@@ -38,6 +33,7 @@ export default function SignUp() {
       .catch((error) => {
         console.log(error);
       });
+    navigate("/");
   };
 
   return (
@@ -86,7 +82,6 @@ export default function SignUp() {
               label="Date of Birth"
             />
           </div>
-
           <Button type="submit" className="mt-6" fullWidth>
             Register
           </Button>
