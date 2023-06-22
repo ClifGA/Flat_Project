@@ -1,17 +1,43 @@
-import React, { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import React, { useState,useEffect } from "react";
+import RenderHours from "../Components/RenderHours";
 
-const Timesheet = () => {
-  const { user } = useAuth0();
+const Timesheet = ({currentTimesheetUser}) => {
+
   
-
-
   const days = ["Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"];
   const [startDate, setStartDate] = useState(new Date());
-  const [data, setData] = useState([
-    { project: "", hours: [0, 0, 0, 0, 0, 0, 0], total: 0 },
-  ]);
+  const [data, setData] = useState([{ project: "", hours: [0, 0, 0, 0, 0, 0, 0], total: 0 }]);
+  const [updateCurrentTimesheetUser, setUpdateCurrentTimesheetUser] = useState(null)
 
+  useEffect(() => {
+    if (currentTimesheetUser) {
+      setUpdateCurrentTimesheetUser(currentTimesheetUser);
+    }
+  }, [currentTimesheetUser]);
+
+  function getStartAndEndOfWeek() {
+    const currentDate = new Date();
+    
+    // Get the start of the week (Sunday)
+    const startOfWeek = new Date(currentDate);
+    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+    
+    // Get the end of the week (Saturday)
+    const endOfWeek = new Date(currentDate);
+    endOfWeek.setDate(currentDate.getDate() + (6 - currentDate.getDay()));
+    endOfWeek.setHours(23, 59, 59, 999);
+    
+    // Format the dates as strings
+    const startDateString = startOfWeek.toDateString();
+    const endDateString = endOfWeek.toDateString();
+    
+    return {
+      startOfWeek: startDateString,
+      endOfWeek: endDateString
+    };
+  }
+  
   const handlePreviousWeek = () => {
     setStartDate((currDate) => dateOffset(currDate, -7));
   };
@@ -40,16 +66,31 @@ const Timesheet = () => {
     setData(updatedData);
   };
 
-  if (user === undefined) {
-    return (
-      <div>
-        <h1 className="text-center text-3xl mt-10 text-gray-700">
-          Must be Logged in to view page.
-        </h1>
-      </div>
-    );
-  }
+  const handleSubmit = (e) => {
+    const { startOfWeek, endOfWeek } = getStartAndEndOfWeek();
+   
+    fetch(`http://127.0.0.1:5000/users/${currentTimesheetUser.id}/timesheets`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        start_date: startOfWeek,
+        end_date: endOfWeek,
+        hours: data[0].total,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data)
+      }
+      )
+    
+  };
 
+  if (!updateCurrentTimesheetUser) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="container mx-auto my-5 p-5">
       <h1 className="text-center text-3xl mt-20 mb-10 font-bold">Time Sheet</h1>
@@ -74,17 +115,17 @@ const Timesheet = () => {
         <thead className="bg-gray-200">
           <tr className="text-left">
             <th>Project</th>
-            {days.map((day) => (
-              <th key={day}>
-                {day}
-                <br />
-                {new Date(
-                  startDate.getFullYear(),
-                  startDate.getMonth(),
-                  startDate.getDate() + days.indexOf(day)
-                ).toLocaleDateString("de-DE")}
-              </th>
-            ))}
+            {days.map((day, index) => {
+             const currentDate = new Date(startDate);
+              currentDate.setDate(startDate.getDate() + index);
+                      return (
+                         <th key={day}>
+                              {day}
+                               <br />
+                                       {currentDate.toLocaleDateString("de-DE")}
+    </th>
+  );
+})}
             <th>Total</th>
             <th></th>
           </tr>
@@ -128,11 +169,12 @@ const Timesheet = () => {
         </button>
         <button
           className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={() => console.log("Hours submitted:", data, startDate)}
+          onClick={handleSubmit}
         >
           Submit
         </button>
       </div>
+      <RenderHours updateCurrentTimesheetUser={updateCurrentTimesheetUser}/>
     </div>
   );
 };

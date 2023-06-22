@@ -21,6 +21,7 @@ const ProfileExp = ({ education, skill }) => {
     );
   });
 
+
   return (
     <div>
       <div className="grid grid-cols-2">

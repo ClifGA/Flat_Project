@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ProfileExp from "./ProfileExp";
 
-const About = ({ useremail }) => {
+const About = ({ currentProfileUser }) => {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
   const [toggle, setToggle] = useState(true);
   const [formfirst, setFirstName] = useState("");
   const [formlast, setLastName] = useState("");
@@ -14,7 +11,12 @@ const About = ({ useremail }) => {
   const [formDOB, setDOB] = useState("");
   const [formgender, setGender] = useState("");
 
-  
+  useEffect(() => {
+    if (currentProfileUser) {
+      setUser(currentProfileUser);
+    }
+  }, [currentProfileUser]);
+
   const handleToggle = () => {
     setToggle(!toggle);
   };
@@ -30,7 +32,7 @@ const About = ({ useremail }) => {
       gender: formgender,
     };
 
-    fetch(`http://127.0.0.1:5000/users/${useremail}`, {
+    fetch(`http://127.0.0.1:5000/users/${currentProfileUser.email}`, {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",
@@ -47,36 +49,8 @@ const About = ({ useremail }) => {
       });
   };
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch(
-          `http://127.0.0.1:5000/users/${useremail}`
-        );
-        const data = await response.json();
-        setUser(data);
-        setIsLoading(false);
-      } catch (error) {
-        setError(error);
-        setIsLoading(false);
-      }
-    };
-    getUser();
-  }, [useremail]);
-
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  } else if (error) {
-    return (
-      <div>
-        Failed to get data. Please try refreshing. Error: {error.message}
-      </div>
-    );
-  }
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  } else if (error) {
-    return <div>Failed to get data please try refreshing {error.message}</div>;
+  if (!user) {
+    return <div>Loading...</div>;
   }
   return (
     <div>
@@ -109,6 +83,10 @@ const About = ({ useremail }) => {
             <div className="grid grid-cols-2">
               <div className="px-4 py-2 font-semibold">Last Name</div>
               <div className="px-4 py-2">{user.last_name}</div>
+            </div>
+            <div className="grid grid-cols-2">
+              <div className="px-4 py-2 font-semibold">Job Title</div>
+              <div className="px-4 py-2">{user.job_title}</div>
             </div>
             <div className="grid grid-cols-2">
               <div className="px-4 py-2 font-semibold">Gender</div>

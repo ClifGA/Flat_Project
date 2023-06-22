@@ -14,6 +14,7 @@ class User(db.Model, SerializerMixin):
     last_name = db.Column(db.String(50))
     gender = db.Column(db.String(50))
     email = db.Column(db.String(50), unique=True)
+    img = db.Column(db.String(50))
     phone = db.Column(db.Integer)
     address = db.Column(db.String(50))
     admin = db.Column(db.Boolean, default=False)
@@ -29,14 +30,8 @@ class User(db.Model, SerializerMixin):
     educations = association_proxy('education_carts', 'education')
     skills = association_proxy('skill_carts', 'skill')
     timesheets = association_proxy('timesheet_carts', 'timesheet')
-
-
-    educations = association_proxy('education_carts', 'education')
-    skills = association_proxy('skill_carts', 'skill')
-    timesheets = association_proxy('timesheet_carts', 'timesheet')
-
     serialize_rules = ('-educations.user', '-skills.user', '-timesheets.user', '-educations.user_education_carts', '-skills.user_skill_carts', '-timesheets.timesheetcarts', )
-    serialize_only = ('id', 'first_name', 'last_name', 'email', 'phone', 'address', 'gender', 'admin', 'job_title', 'status', 'DOB', 'educations', 'skills', 'timesheets',)
+    serialize_only = ('id', 'first_name', 'last_name', 'email', 'phone', 'address', 'gender', 'admin', 'job_title', 'status', 'DOB', 'educations', 'skills', 'timesheets','img')
     
     
 
@@ -72,6 +67,8 @@ class Skill(db.Model, SerializerMixin):
     proficiency = db.Column(db.String(50))
 
 
+
+
 class Timesheetcart(db.Model, SerializerMixin):
     __tablename__ = 'timesheetcarts'
 
@@ -80,11 +77,16 @@ class Timesheetcart(db.Model, SerializerMixin):
     timesheet_id = db.Column(db.Integer, db.ForeignKey('timesheets.id'))
     timesheet = db.relationship('Timesheet', backref='timesheetcarts')
 
+    serialize_rules = ('-timesheetcarts.user', )
+
 
 class Timesheet(db.Model, SerializerMixin):
     __tablename__ = 'timesheets'
 
     id = db.Column(db.Integer, primary_key=True)
-    start_date = db.Column(db.DateTime)
-    end_date = db.Column(db.DateTime)
+    start_date = db.Column(db.String(50))
+    end_date = db.Column(db.String(50))
     hours = db.Column(db.Integer)
+
+    serialize_rules = ('-timesheetcarts.timesheet', )
+    serialize_only = ('id', 'start_date', 'end_date', 'hours', )

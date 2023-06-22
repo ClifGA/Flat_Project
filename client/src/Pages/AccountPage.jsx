@@ -5,10 +5,9 @@ import FriendCard from "../Components/FriendCard";
 import About from "../Components/About";
 import { useEffect, useState } from "react";
 
-const AccountPage = () => {
+const AccountPage = ({currentProfileUser}) => {
   const { user } = useAuth0();
  
-
   if (user === undefined) {
     return (
       <div>
@@ -27,7 +26,7 @@ const AccountPage = () => {
           <FriendCard />
         </div>
         <div className="w-full md:w-9/12 mx-2 h-64">
-          <About useremail={user.email} />
+          <About currentProfileUser={currentProfileUser} />
           <div class="my-4"></div>
           <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3"></div>
         </div>
