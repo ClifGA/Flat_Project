@@ -10,8 +10,7 @@ const url = `https://jsearch.p.rapidapi.com/search?query=${search}&page=1&num_pa
 const options = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': '53caa428fcmshfd1991fa8771ba2p1f8990jsnda6d189f95e8',
-		'X-RapidAPI-Host': 'jsearch.p.rapidapi.com'
+	
 	}
 };
 try {
