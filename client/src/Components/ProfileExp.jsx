@@ -1,7 +1,6 @@
 import React from "react";
 
 const ProfileExp = ({ education, skill }) => {
-
   const educationList = education.map((item) => {
     return (
       <li>
@@ -20,7 +19,6 @@ const ProfileExp = ({ education, skill }) => {
       </li>
     );
   });
-
 
   return (
     <div>
@@ -74,8 +72,7 @@ const ProfileExp = ({ education, skill }) => {
           </div>
           <ul className="list-inside space-y-2">{educationList}</ul>
         </div>
-        <div>
-        </div>
+        <div></div>
       </div>
     </div>
   );

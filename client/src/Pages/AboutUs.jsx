@@ -7,8 +7,7 @@ const AboutUs = () => {
         <div className="w-full md:w-3/12 md:mx-2ma">
           <div className="bg-white p-3 border-t-4 border-green-400">
             test
-            <div className="image overflow-hidden">
-            </div>
+            <div className="image overflow-hidden"></div>
           </div>
         </div>
         <div className="w-full md:w-9/12 mx-2 h-64">
@@ -33,13 +32,13 @@ const AboutUs = () => {
               <span className="tracking-wide">About Us</span>
             </div>
             <p className="text-gray-700">
-              We are a group of students from the University of Washington
-              Coding Bootcamp. We are currently working on our final project
-              which is a full stack application. We are using React, Node,
-              Express, MongoDB, and GraphQL. We are also using Tailwind CSS for
-              styling.
+              We are a cohort of aspiring developers enrolled in the Flatiron
+              Bootcamp, diligently collaborating on our final project—a
+              cutting-edge, full stack application. To accomplish this, we have
+              meticulously chosen a powerful tech stack that comprises React,
+              Node.js, SQL Alchemy, and Flask.
             </p>
-            
+
             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mt-3">
               <span className="text-green-500">
                 <svg
@@ -61,29 +60,17 @@ const AboutUs = () => {
                   className="flex items-end justify-end h-56 w-full bg-cover"
                   style={{
                     backgroundImage:
-                      "url('https://images.unsplash.com/photo-1556742048-3f5c7c0ba8f0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')", 
+                      "url('https://i.insider.com/5f1ef5bbf0f41912f83e570d?width=1136&format=jpeg')",
                   }}
-                >
-                  <button className="p-2 rounded-full bg-gray-800 text-white mx-5 -mb-4 hover:bg-gray-700 focus:bg-gray-700">
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                  </button>
-                </div>
+                ></div>
+                
               </div>
             </div>
+           
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 export default AboutUs;

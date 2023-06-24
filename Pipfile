@@ -11,7 +11,8 @@ flask-restful = "*"
 sqlalchemy-serializer = "*"
 flask-cors = "*"
 requests = "*"
-
+sqlalchemy = "*"
+pymysql = "*"
 
 [dev-packages]
 

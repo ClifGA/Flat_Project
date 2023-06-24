@@ -5,9 +5,9 @@ import FriendCard from "../Components/FriendCard";
 import About from "../Components/About";
 import { useEffect, useState } from "react";
 
-const AccountPage = ({currentProfileUser}) => {
+const AccountPage = ({ currentProfileUser }) => {
   const { user } = useAuth0();
- 
+
   if (user === undefined) {
     return (
       <div>
@@ -21,7 +21,7 @@ const AccountPage = ({currentProfileUser}) => {
     <div className="container mx-auto my-5 p-5">
       <div className="md:flex no-wrap md:-mx-2">
         <div className="w-full md:w-3/12 md:mx-2ma">
-          <ProfileCard user={user}/>
+          <ProfileCard user={user} />
           <div class="my-4"></div>
           <FriendCard />
         </div>

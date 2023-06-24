@@ -1,43 +1,45 @@
-import React, { useState,useEffect } from "react";
-import RenderHours from "../Components/RenderHours";
+import React, { useState, useEffect } from "react";
 
-const Timesheet = ({currentTimesheetUser}) => {
+import BarChart from "../Components/BarChart";
 
-  
+const Timesheet = ({ currentTimesheetUser }) => {
   const days = ["Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"];
   const [startDate, setStartDate] = useState(new Date());
-  const [data, setData] = useState([{ project: "", hours: [0, 0, 0, 0, 0, 0, 0], total: 0 }]);
-  const [updateCurrentTimesheetUser, setUpdateCurrentTimesheetUser] = useState(null)
+  const [data, setData] = useState([
+    { project: "", hours: [0, 0, 0, 0, 0, 0, 0], total: 0 },
+  ]);
+  const [updateCurrentTimesheetUser, setUpdateCurrentTimesheetUser] =
+    useState(null);
 
   useEffect(() => {
     if (currentTimesheetUser) {
-      setUpdateCurrentTimesheetUser(currentTimesheetUser);
+      setUpdateCurrentTimesheetUser(currentTimesheetUser.timesheets);
     }
   }, [currentTimesheetUser]);
 
   function getStartAndEndOfWeek() {
     const currentDate = new Date();
-    
+
     // Get the start of the week (Sunday)
     const startOfWeek = new Date(currentDate);
     startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
-    
+
     // Get the end of the week (Saturday)
     const endOfWeek = new Date(currentDate);
     endOfWeek.setDate(currentDate.getDate() + (6 - currentDate.getDay()));
     endOfWeek.setHours(23, 59, 59, 999);
-    
+
     // Format the dates as strings
     const startDateString = startOfWeek.toDateString();
     const endDateString = endOfWeek.toDateString();
-    
+
     return {
       startOfWeek: startDateString,
-      endOfWeek: endDateString
+      endOfWeek: endDateString,
     };
   }
-  
+
   const handlePreviousWeek = () => {
     setStartDate((currDate) => dateOffset(currDate, -7));
   };
@@ -68,7 +70,7 @@ const Timesheet = ({currentTimesheetUser}) => {
 
   const handleSubmit = (e) => {
     const { startOfWeek, endOfWeek } = getStartAndEndOfWeek();
-   
+
     fetch(`http://127.0.0.1:5000/users/${currentTimesheetUser.id}/timesheets`, {
       method: "POST",
       headers: {
@@ -82,10 +84,13 @@ const Timesheet = ({currentTimesheetUser}) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Success:", data)
-      }
-      )
-    
+        console.log("Success:", data);
+        setUpdateCurrentTimesheetUser((prevTimesheets) => [
+          ...prevTimesheets,
+          data,
+        ]);
+        window.location.reload();
+      });
   };
 
   if (!updateCurrentTimesheetUser) {
@@ -110,22 +115,22 @@ const Timesheet = ({currentTimesheetUser}) => {
         >
           Next Week
         </button>
-      </div>  
+      </div>
       <table className="w-full table-auto">
         <thead className="bg-gray-200">
           <tr className="text-left">
             <th>Project</th>
             {days.map((day, index) => {
-             const currentDate = new Date(startDate);
+              const currentDate = new Date(startDate);
               currentDate.setDate(startDate.getDate() + index);
-                      return (
-                         <th key={day}>
-                              {day}
-                               <br />
-                                       {currentDate.toLocaleDateString("de-DE")}
-    </th>
-  );
-})}
+              return (
+                <th key={day}>
+                  {day}
+                  <br />
+                  {currentDate.toLocaleDateString("de-DE")}
+                </th>
+              );
+            })}
             <th>Total</th>
             <th></th>
           </tr>
@@ -174,7 +179,7 @@ const Timesheet = ({currentTimesheetUser}) => {
           Submit
         </button>
       </div>
-      <RenderHours updateCurrentTimesheetUser={updateCurrentTimesheetUser}/>
+      <BarChart timesheets={updateCurrentTimesheetUser} />
     </div>
   );
 };
