@@ -15,12 +15,12 @@ class User(db.Model, SerializerMixin):
     gender = db.Column(db.String(50))
     email = db.Column(db.String(50), unique=True)
     img = db.Column(db.String(50))
-    phone = db.Column(db.Integer)
+    phone = db.Column(db.String(50))
     address = db.Column(db.String(50))
     admin = db.Column(db.Boolean, default=False)
     job_title = db.Column(db.String(50))
     status = db.Column(db.String(50))
-    DOB = db.Column(db.String(50))
+    birthday = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
@@ -31,7 +31,7 @@ class User(db.Model, SerializerMixin):
     skills = association_proxy('skill_carts', 'skill')
     timesheets = association_proxy('timesheet_carts', 'timesheet')
     serialize_rules = ('-educations.user', '-skills.user', '-timesheets.user', '-educations.user_education_carts', '-skills.user_skill_carts', '-timesheets.timesheetcarts', )
-    serialize_only = ('id', 'first_name', 'last_name', 'email', 'phone', 'address', 'gender', 'admin', 'job_title', 'status', 'DOB', 'educations', 'skills', 'timesheets','img')
+    serialize_only = ('id', 'first_name', 'last_name', 'email', 'phone', 'address', 'gender', 'admin', 'job_title', 'status', 'birthday', 'educations', 'skills', 'timesheets','img')
     
     
 
