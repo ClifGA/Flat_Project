@@ -67,11 +67,3 @@ class PostTimesheetCartbyUser(Resource):
             return {'message': 'Timesheet not found'}, 404
 api.add_resource(PostTimesheetCartbyUser, '/users/<int:user_id>/timesheets')
     
-
-
-
-
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
-
