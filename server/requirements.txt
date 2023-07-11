@@ -25,4 +25,4 @@ SQLAlchemy==2.0.18
 SQLAlchemy-serializer==1.4.1
 typing_extensions==4.7.1
 urllib3==2.0.3
-Werkzeug==2.3.6
+
