@@ -3,11 +3,12 @@ from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_cors import CORS
 from models import db, User, Timesheet, Timesheetcart
+import os
 
 
 app = Flask(__name__)
 CORS(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URL') 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.json.compact = False
 
@@ -17,12 +18,12 @@ api = Api(app)
 
 class UserAccount(Resource):
     def get(self, email):
-        # try:
-        users = User.query.filter_by(email = email).first()
-        print(users.to_dict())
-        return users.to_dict(), 200
-        # except:
-        #     return {'message': 'User not found'}, 404
+        try:
+            users = User.query.filter_by(email = email).first()
+            print(users.to_dict())
+            return users.to_dict(), 200
+        except:
+            return {'message': 'User not found'}, 404
     def patch(self, email):
         user = User.query.filter_by(email = email).first()
         for key, value in request.json.items():
